@@ -74,7 +74,8 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
               <div key={year} className="flex items-center space-x-4">
                 <span className="w-12 text-sm font-medium">{year}</span>
                 <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-green-500 to-green-700 rounded-full transition-all duration-1000 ease-out" style={{ width: `${(count / totalAlumni) * 100}%` }}></div>
+                  {/* FIX: Prevent division by zero if totalAlumni is 0. */}
+                  <div className="h-full bg-gradient-to-r from-green-500 to-green-700 rounded-full transition-all duration-1000 ease-out" style={{ width: `${(count / (totalAlumni || 1)) * 100}%` }}></div>
                 </div>
                 <span className="w-8 text-sm text-gray-600 dark:text-gray-400">{count}</span>
               </div>
