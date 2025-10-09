@@ -26,7 +26,7 @@ const Toast: React.FC<Props> = ({ toast, onClose }) => {
   const Icon = icons[toast.type];
   
   return (
-    <div className={`fixed top-4 right-4 ${colors[toast.type]} text-white px-6 py-4 rounded-lg shadow-2xl z-50 flex items-center space-x-3 transform transition-all duration-300 animate-pulse`}>
+    <div className={`fixed top-4 right-4 ${colors[toast.type]} text-white px-6 py-4 rounded-lg shadow-2xl z-50 flex items-center space-x-3 animate-slide-in-right`}>
       <Icon className="h-5 w-5" />
       <span className="font-medium">{toast.message}</span>
       <button onClick={onClose} className="ml-2 hover:bg-white/20 rounded p-1">

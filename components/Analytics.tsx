@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Alumni } from '../types';
 import { GraduationCap, MapPin, DollarSign, Building2, Activity } from './icons';
@@ -12,13 +11,14 @@ const Analytics: React.FC<Props> = ({ alumni }) => {
   const mscGraduates = alumni.filter(a => a.degree === 'MSc').length;
   const phdGraduates = alumni.filter(a => a.degree === 'PhD').length;
   const activeAlumni = alumni.filter(a => a.isActive).length;
-  const recentGraduates = alumni.filter(a => parseInt(a.graduationYear) >= 2020).length;
+  const recentGraduates = alumni.filter(a => Number(a.graduationYear) >= 2020).length;
 
-  const salaries = alumni.map(a => parseInt(a.salary));
+  const salaries = alumni.map(a => Number(a.salary)).filter(s => !isNaN(s));
   const averageSalary = salaries.reduce((sum, s) => sum + s, 0) / (salaries.length || 1);
-  const highestSalary = Math.max(...salaries, 0);
-  const lowestSalary = Math.min(...salaries, Infinity);
+  const highestSalary = salaries.length > 0 ? Math.max(...salaries) : 0;
+  const lowestSalary = salaries.length > 0 ? Math.min(...salaries) : 0;
   
+  // FIX: Add explicit type for the initial value of the reduce accumulator to fix downstream type errors.
   const geoDistribution = alumni.reduce((acc, person) => {
     const city = person.location.split(',')[0];
     acc[city] = (acc[city] || 0) + 1;
@@ -26,6 +26,7 @@ const Analytics: React.FC<Props> = ({ alumni }) => {
   }, {} as Record<string, number>);
 
   const topEmployers = Object.entries(
+    // FIX: Add explicit type for the initial value of the reduce accumulator to fix downstream type errors.
     alumni.reduce((acc, person) => {
       acc[person.company] = (acc[person.company] || 0) + 1;
       return acc;

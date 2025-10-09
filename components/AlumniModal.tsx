@@ -88,7 +88,7 @@ const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, onClose, onSa
     
     return (
       <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-        <div className="bg-white dark:bg-gray-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all duration-300 scale-100">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-scale-in">
           <div className="p-6 lg:p-8">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent">
@@ -144,7 +144,7 @@ const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, onClose, onSa
                </div>
                <div className="space-y-4">
                  <div className="flex items-center space-x-3"><Building2 className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">{selectedAlumni.company}</span></div>
-                 <div className="flex items-center space-x-3"><DollarSign className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">₦{parseInt(selectedAlumni.salary).toLocaleString()}</span></div>
+                 <div className="flex items-center space-x-3"><DollarSign className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">₦{(Number(selectedAlumni.salary) || 0).toLocaleString()}</span></div>
                  <div className="flex items-center space-x-3"><Globe className="h-5 w-5 text-green-500" /><a href={`https://${selectedAlumni.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 flex items-center space-x-1"><span>LinkedIn Profile</span><ExternalLink className="h-4 w-4" /></a></div>
                  <div className="flex items-center space-x-3"><Activity className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">Last login: {selectedAlumni.lastLogin}</span></div>
                </div>

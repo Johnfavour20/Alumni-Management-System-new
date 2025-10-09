@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Alumni } from '../types';
 import { Users, GraduationCap, Award, Activity, TrendingUp, Target, Star, DollarSign } from './icons';
@@ -12,15 +11,17 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
   const totalAlumni = alumni.length;
   const mscGraduates = alumni.filter(a => a.degree === 'MSc').length;
   const phdGraduates = alumni.filter(a => a.degree === 'PhD').length;
-  const recentGraduates = alumni.filter(a => parseInt(a.graduationYear) >= 2020).length;
+  const recentGraduates = alumni.filter(a => Number(a.graduationYear) >= 2020).length;
   const activeAlumni = alumni.filter(a => a.isActive).length;
-  const averageSalary = alumni.reduce((sum, a) => sum + parseInt(a.salary), 0) / (totalAlumni || 1);
+  const averageSalary = alumni.reduce((sum, a) => sum + (Number(a.salary) || 0), 0) / (totalAlumni || 1);
 
+  // FIX: Explicitly type the initial value of the reduce accumulator to ensure `count` is inferred as a number.
   const graduationYearsData = alumni.reduce((acc, a) => {
     acc[a.graduationYear] = (acc[a.graduationYear] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
+  // FIX: Explicitly type the initial value of the reduce accumulator to ensure `count` is inferred as a number.
   const careerData = alumni.reduce((acc, a) => {
       const role = a.currentPosition.includes("Engineer") ? "Software Engineer" : 
                    a.currentPosition.includes("Scientist") ? "Research Scientist" :
@@ -86,48 +87,9 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
             {Object.entries(careerData).map(([role, count]) => (
               <div key={role} className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{role}</span>
-                <div className="flex items-center space-x-3">
-                  <div className="w-20 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                    <div className="h-full bg-gradient-to-r from-green-500 to-green-700 rounded-full transition-all duration-1000" style={{ width: `${(count / totalAlumni) * 100}%` }}></div>
-                  </div>
-                  <span className="text-sm text-gray-600 dark:text-gray-400 w-8">{count}</span>
-                </div>
+                <span className="text-sm font-bold text-gray-800 dark:text-white w-12 text-right">{count}</span>
               </div>
             ))}
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center"><Star className="h-6 w-6 text-yellow-500 mr-2" />Recent Alumni Activity</h3>
-          <div className="space-y-4">
-            {alumni.slice(0, 4).map(person => (
-              <div key={person.id} className="flex items-center space-x-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-green-700 rounded-full flex items-center justify-center text-white font-semibold">{person.firstName.charAt(0)}{person.lastName.charAt(0)}</div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900 dark:text-white">{person.firstName} {person.lastName}</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">{person.currentPosition}</p>
-                </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">{person.lastLogin}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center"><DollarSign className="h-6 w-6 text-green-500 mr-2" />Quick Stats</h3>
-          <div className="space-y-4">
-            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <p className="text-sm text-gray-600 dark:text-gray-400">Avg. Salary</p>
-              <p className="text-lg font-bold text-green-600">₦{(averageSalary / 1000000).toFixed(1)}M</p>
-            </div>
-            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <p className="text-sm text-gray-600 dark:text-gray-400">Recent Grads (2020+)</p>
-              <p className="text-lg font-bold text-green-600">{recentGraduates}</p>
-            </div>
-            <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <p className="text-sm text-gray-600 dark:text-gray-400">Companies</p>
-              <p className="text-lg font-bold text-green-600">{new Set(alumni.map(a => a.company)).size}</p>
-            </div>
           </div>
         </div>
       </div>

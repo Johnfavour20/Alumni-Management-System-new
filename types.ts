@@ -30,7 +30,7 @@ export interface Toast {
 
 export type ModalType = 'view' | 'add' | 'edit';
 
-export type Page = 'dashboard' | 'alumni' | 'analytics' | 'community' | 'messages';
+export type Page = 'dashboard' | 'alumni' | 'analytics' | 'community' | 'messages' | 'newsletter';
 
 export type ViewMode = 'grid' | 'list';
 

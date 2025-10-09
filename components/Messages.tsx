@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import type { Conversation, Alumni } from '../types';
 import { CURRENT_USER_ID } from '../constants';
-import { Send, Mail, ChevronLeft, Microphone, Play, Pause } from './icons';
+import { Send, Mail, ChevronLeft, Mic, Play, Pause } from './icons';
 
 interface Props {
   conversations: Conversation[];
@@ -120,7 +120,7 @@ const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId
   const handleMicRelease = () => {
       setIsRecording(false);
       if (activeConversationId !== null && recordingTime > 0) {
-        onSendVoiceNote(activeConversationId, formatTime(recordingTime).slice(-4));
+        onSendVoiceNote(activeConversationId, formatTime(recordingTime));
       }
   };
   
@@ -223,9 +223,9 @@ const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId
                         onMouseUp={handleMicRelease}
                         onTouchStart={handleMicPress}
                         onTouchEnd={handleMicRelease}
-                        className={`p-3 rounded-full transition-colors ${isRecording ? 'bg-green-700 animate-pulse' : 'bg-green-600'} text-white hover:bg-green-700`}
+                        className={`p-3 rounded-full transition-colors ${isRecording ? 'bg-red-600 animate-pulse' : 'bg-green-600'} text-white hover:bg-green-700`}
                     >
-                      <Microphone className="h-6 w-6" />
+                      <Mic className="h-6 w-6" />
                     </button>
                   )}
                 </div>

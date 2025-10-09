@@ -9,6 +9,7 @@ import AlumniRecords from './components/AlumniRecords';
 import Analytics from './components/Analytics';
 import Community from './components/Community';
 import Messages from './components/Messages';
+import Newsletter from './components/Newsletter';
 import AlumniModal from './components/AlumniModal';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
 import Toast from './components/Toast';
@@ -261,6 +262,8 @@ const App: React.FC = () => {
         return <Messages conversations={conversations} alumni={alumni} activeConversationId={activeConversationId} setActiveConversationId={setActiveConversationAndReadMessages} onSendMessage={handleSendMessage} onSendVoiceNote={handleSendVoiceNote} typingInfo={typingInfo} />;
       case 'analytics':
         return <Analytics alumni={alumni} />;
+      case 'newsletter':
+        return <Newsletter alumni={alumni} showToast={showToast} />;
       default:
         return <Dashboard alumni={alumni} animateCards={animateCards} />;
     }
@@ -336,6 +339,32 @@ const App: React.FC = () => {
           .animate-fade-in {
             animation: none;
           }
+        }
+        @keyframes slide-in-right {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        .animate-slide-in-right {
+          animation: slide-in-right 0.5s ease-out forwards;
+        }
+        @keyframes scale-in {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+        .animate-scale-in {
+          animation: scale-in 0.3s ease-out forwards;
+        }
+        .prose {
+            line-height: 1.6;
+        }
+        .prose p, .prose ul, .prose ol {
+            margin-bottom: 1em;
+        }
+        .prose ul, .prose ol {
+            padding-left: 1.5em;
+        }
+        .prose li {
+            margin-bottom: 0.25em;
         }
       `}</style>
     </div>

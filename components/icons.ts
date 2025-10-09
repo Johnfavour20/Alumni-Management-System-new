@@ -7,5 +7,6 @@ export {
   CheckCircle, XCircle, Loader, RefreshCw, FileText, UserPlus, Grid, List,
   SortAsc, SortDesc, Building2, DollarSign, ExternalLink,
   MessageSquare, ThumbsUp, MessageCircle, Send, ChevronLeft,
-  Microphone, Play, Pause
+  Mic, Play, Pause,
+  Bold, Italic, Underline, ListOrdered, List as ListIcon, Code
 } from 'lucide-react';

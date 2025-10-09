@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Home, Database, BarChart3, GraduationCap, Bell, Menu, X, MessageSquare, Mail } from './icons';
+import { Home, Database, BarChart3, GraduationCap, Bell, Menu, X, MessageSquare, Mail, Send } from './icons';
 import type { Page } from '../types';
 import { NOTIFICATIONS } from '../constants';
 
@@ -48,7 +48,8 @@ const Navigation: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOpen,
               { name: 'Dashboard', icon: Home, page: 'dashboard' as Page },
               { name: 'Alumni Records', icon: Database, page: 'alumni' as Page },
               { name: 'Community', icon: MessageSquare, page: 'community' as Page },
-              { name: 'Analytics', icon: BarChart3, page: 'analytics' as Page }
+              { name: 'Analytics', icon: BarChart3, page: 'analytics' as Page },
+              { name: 'Newsletter', icon: Send, page: 'newsletter' as Page },
             ].map(item => (
               <button
                 key={item.page}
