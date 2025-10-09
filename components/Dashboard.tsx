@@ -15,14 +15,14 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
   const activeAlumni = alumni.filter(a => a.isActive).length;
   const averageSalary = alumni.reduce((sum, a) => sum + (Number(a.salary) || 0), 0) / (totalAlumni || 1);
 
-  // FIX: Use a generic argument to explicitly type the reduce accumulator, ensuring correct type inference for downstream operations.
-  const graduationYearsData = alumni.reduce<Record<string, number>>((acc, a) => {
+  // FIX: Explicitly type the initial value for reduce to ensure correct type inference for the accumulator.
+  const graduationYearsData = alumni.reduce((acc: Record<string, number>, a) => {
     acc[a.graduationYear] = (acc[a.graduationYear] || 0) + 1;
     return acc;
-  }, {});
+  }, {} as Record<string, number>);
 
-  // FIX: Use a generic argument to explicitly type the reduce accumulator, ensuring correct type inference for downstream operations.
-  const careerData = alumni.reduce<Record<string, number>>((acc, a) => {
+  // FIX: Explicitly type the initial value for reduce to ensure correct type inference for the accumulator.
+  const careerData = alumni.reduce((acc: Record<string, number>, a) => {
       const role = a.currentPosition.includes("Engineer") ? "Software Engineer" : 
                    a.currentPosition.includes("Scientist") ? "Research Scientist" :
                    a.currentPosition.includes("CEO") || a.currentPosition.includes("Entrepreneur") ? "Entrepreneur/CEO" :
@@ -30,7 +30,7 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
                    a.currentPosition.includes("Professor") ? "Academic/Professor" : "Other";
       acc[role] = (acc[role] || 0) + 1;
       return acc;
-  }, {});
+  }, {} as Record<string, number>);
 
   return (
     <div className="p-4 lg:p-8">
@@ -74,7 +74,6 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
               <div key={year} className="flex items-center space-x-4">
                 <span className="w-12 text-sm font-medium">{year}</span>
                 <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-                  {/* FIX: Prevent division by zero if totalAlumni is 0. */}
                   <div className="h-full bg-gradient-to-r from-green-500 to-green-700 rounded-full transition-all duration-1000 ease-out" style={{ width: `${(count / (totalAlumni || 1)) * 100}%` }}></div>
                 </div>
                 <span className="w-8 text-sm text-gray-600 dark:text-gray-400">{count}</span>

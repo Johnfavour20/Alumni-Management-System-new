@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "serve .",
-    "build": "mkdir dist && cp -r index.html index.tsx App.tsx types.ts constants.ts metadata.json components dist/"
+    "build": "mkdir -p dist && cp -r index.html index.tsx App.tsx types.ts constants.ts metadata.json components dist/"
   },
   "devDependencies": {
     "react": "^19.2.0",

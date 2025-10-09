@@ -18,19 +18,19 @@ const Analytics: React.FC<Props> = ({ alumni }) => {
   const highestSalary = salaries.length > 0 ? Math.max(...salaries) : 0;
   const lowestSalary = salaries.length > 0 ? Math.min(...salaries) : 0;
   
-  // FIX: Use a generic argument to explicitly type the reduce accumulator, ensuring correct type inference for downstream operations.
-  const geoDistribution = alumni.reduce<Record<string, number>>((acc, person) => {
+  // FIX: Explicitly type the initial value for reduce to ensure correct type inference for the accumulator.
+  const geoDistribution = alumni.reduce((acc: Record<string, number>, person) => {
     const city = person.location.split(',')[0];
     acc[city] = (acc[city] || 0) + 1;
     return acc;
-  }, {});
+  }, {} as Record<string, number>);
 
   const topEmployers = Object.entries(
-    // FIX: Use a generic argument to explicitly type the reduce accumulator, ensuring correct type inference for downstream operations.
-    alumni.reduce<Record<string, number>>((acc, person) => {
+    // FIX: Explicitly type the initial value for reduce to ensure correct type inference for the accumulator and resolve the sort function type error.
+    alumni.reduce((acc: Record<string, number>, person) => {
       acc[person.company] = (acc[person.company] || 0) + 1;
       return acc;
-    }, {})
+    }, {} as Record<string, number>)
   ).sort(([,a], [,b]) => b - a).slice(0, 5);
   
   return (
