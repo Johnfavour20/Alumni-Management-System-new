@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "start": "serve .",
-    "build": "echo \"No build step required. This is a static application.\""
+    "build": "mkdir dist && cp -r index.html index.tsx App.tsx types.ts constants.ts metadata.json components dist/"
   },
   "devDependencies": {
     "react": "^19.2.0",

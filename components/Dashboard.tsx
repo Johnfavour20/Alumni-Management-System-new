@@ -15,14 +15,14 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
   const activeAlumni = alumni.filter(a => a.isActive).length;
   const averageSalary = alumni.reduce((sum, a) => sum + (Number(a.salary) || 0), 0) / (totalAlumni || 1);
 
-  // FIX: Explicitly type the initial value of the reduce accumulator to ensure `count` is inferred as a number.
-  const graduationYearsData = alumni.reduce((acc, a) => {
+  // FIX: Use a generic argument to explicitly type the reduce accumulator, ensuring correct type inference for downstream operations.
+  const graduationYearsData = alumni.reduce<Record<string, number>>((acc, a) => {
     acc[a.graduationYear] = (acc[a.graduationYear] || 0) + 1;
     return acc;
-  }, {} as Record<string, number>);
+  }, {});
 
-  // FIX: Explicitly type the initial value of the reduce accumulator to ensure `count` is inferred as a number.
-  const careerData = alumni.reduce((acc, a) => {
+  // FIX: Use a generic argument to explicitly type the reduce accumulator, ensuring correct type inference for downstream operations.
+  const careerData = alumni.reduce<Record<string, number>>((acc, a) => {
       const role = a.currentPosition.includes("Engineer") ? "Software Engineer" : 
                    a.currentPosition.includes("Scientist") ? "Research Scientist" :
                    a.currentPosition.includes("CEO") || a.currentPosition.includes("Entrepreneur") ? "Entrepreneur/CEO" :
@@ -30,7 +30,7 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
                    a.currentPosition.includes("Professor") ? "Academic/Professor" : "Other";
       acc[role] = (acc[role] || 0) + 1;
       return acc;
-  }, {} as Record<string, number>);
+  }, {});
 
   return (
     <div className="p-4 lg:p-8">
