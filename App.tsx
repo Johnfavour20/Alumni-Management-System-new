@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import type { Alumni, Page, Toast as ToastType, ModalType, Post, Conversation, Message } from './types';
-import { INITIAL_ALUMNI_DATA, INITIAL_POSTS_DATA, INITIAL_CONVERSATIONS_DATA, CURRENT_USER_ID } from './constants';
+import type { Alumni, Page, Toast as ToastType, ModalType, Post, Conversation, Message, User } from './types';
+import { INITIAL_ALUMNI_DATA, INITIAL_POSTS_DATA, INITIAL_CONVERSATIONS_DATA, CURRENT_USER_ID, CURRENT_USER } from './constants';
 import Navigation from './components/Navigation';
 import MobileSidebar from './components/MobileSidebar';
 import Dashboard from './components/Dashboard';
@@ -10,6 +10,7 @@ import Analytics from './components/Analytics';
 import Community from './components/Community';
 import Messages from './components/Messages';
 import Newsletter from './components/Newsletter';
+import Profile from './components/Profile';
 import AlumniModal from './components/AlumniModal';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
 import Toast from './components/Toast';
@@ -23,6 +24,9 @@ const App: React.FC = () => {
   
   const [alumni, setAlumni] = useState<Alumni[]>(INITIAL_ALUMNI_DATA);
   const [toast, setToast] = useState<ToastType | null>(null);
+
+  // New state for current user
+  const [currentUser, setCurrentUser] = useState<User>(CURRENT_USER);
 
   // New state for communication features
   const [posts, setPosts] = useState<Post[]>(INITIAL_POSTS_DATA);
@@ -118,6 +122,12 @@ const App: React.FC = () => {
     } finally {
         setIsLoading(false);
     }
+  };
+  
+  const handleUpdateUser = async (userData: Omit<User, 'id' | 'role'>) => {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      setCurrentUser(prevUser => ({...prevUser, ...userData}));
+      showToast('Profile updated successfully!');
   };
 
   // Community Feature Handlers
@@ -264,6 +274,8 @@ const App: React.FC = () => {
         return <Analytics alumni={alumni} />;
       case 'newsletter':
         return <Newsletter alumni={alumni} showToast={showToast} />;
+      case 'profile':
+        return <Profile user={currentUser} onUpdateUser={handleUpdateUser} showToast={showToast} />;
       default:
         return <Dashboard alumni={alumni} animateCards={animateCards} />;
     }

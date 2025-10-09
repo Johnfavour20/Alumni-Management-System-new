@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Home, Database, BarChart3, X, MessageSquare, Mail, Send } from './icons';
+import { Home, Database, BarChart3, X, MessageSquare, Mail, Send, User } from './icons';
 import type { Page } from '../types';
 
 interface Props {
@@ -30,7 +30,8 @@ const MobileSidebar: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOp
             { name: 'Community', icon: MessageSquare, page: 'community' as Page },
             { name: 'Messages', icon: Mail, page: 'messages' as Page },
             { name: 'Analytics', icon: BarChart3, page: 'analytics' as Page },
-            { name: 'Newsletter', icon: Send, page: 'newsletter' as Page }
+            { name: 'Newsletter', icon: Send, page: 'newsletter' as Page },
+            { name: 'Profile', icon: User, page: 'profile' as Page }
           ].map(item => (
             <button
               key={item.page}

@@ -1,6 +1,14 @@
-import type { Alumni, Post, Conversation } from './types';
+import type { Alumni, Post, Conversation, User } from './types';
 
 export const CURRENT_USER_ID = 0; // Represents the system user/admin
+
+export const CURRENT_USER: User = {
+  id: CURRENT_USER_ID,
+  firstName: 'Admin',
+  lastName: 'User',
+  email: 'admin@uniport-cs.edu',
+  role: 'Admin',
+};
 
 export const INITIAL_ALUMNI_DATA: Alumni[] = [
   {

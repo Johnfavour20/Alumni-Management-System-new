@@ -20,6 +20,14 @@ export interface Alumni {
   skills: string[];
 }
 
+export interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'Admin';
+}
+
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 export interface Toast {
@@ -30,7 +38,7 @@ export interface Toast {
 
 export type ModalType = 'view' | 'add' | 'edit';
 
-export type Page = 'dashboard' | 'alumni' | 'analytics' | 'community' | 'messages' | 'newsletter';
+export type Page = 'dashboard' | 'alumni' | 'analytics' | 'community' | 'messages' | 'newsletter' | 'profile';
 
 export type ViewMode = 'grid' | 'list';
 

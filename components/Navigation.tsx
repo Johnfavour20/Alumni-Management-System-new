@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Home, Database, BarChart3, GraduationCap, Bell, Menu, X, MessageSquare, Mail, Send } from './icons';
+import { Home, Database, BarChart3, GraduationCap, Bell, Menu, X, MessageSquare, Mail, Send, User } from './icons';
 import type { Page } from '../types';
 import { NOTIFICATIONS } from '../constants';
 
@@ -107,6 +107,13 @@ const Navigation: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOpen,
               )}
             </div>
             
+            <button
+              onClick={() => setCurrentPage('profile')}
+              title="Profile"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              <User className="h-5 w-5 sm:h-6 sm:w-6" />
+            </button>
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300 transform hover:rotate-180"
