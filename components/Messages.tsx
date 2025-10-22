@@ -1,12 +1,12 @@
 
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import type { Conversation, Alumni } from '../types';
-import { CURRENT_USER_ID } from '../constants';
+import type { Conversation, Alumni, User } from '../types';
 import { Send, Mail, ChevronLeft, Mic, Play, Pause } from './icons';
 
 interface Props {
   conversations: Conversation[];
-  alumni: Alumni[];
+  users: Map<number, User | Alumni>;
+  currentUser: User;
   activeConversationId: number | null;
   setActiveConversationId: (id: number | null) => void;
   onSendMessage: (conversationId: number, content: string) => void;
@@ -65,18 +65,12 @@ const VoiceNotePlayer: React.FC<{ duration: string, isSender: boolean }> = ({ du
     );
 };
 
-const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId, setActiveConversationId, onSendMessage, onSendVoiceNote, typingInfo }) => {
+const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeConversationId, setActiveConversationId, onSendMessage, onSendVoiceNote, typingInfo }) => {
   const [newMessage, setNewMessage] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const recordingIntervalRef = useRef<number | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
-
-  const alumniMap = useMemo(() => {
-    const map = new Map<number, Alumni>();
-    alumni.forEach(a => map.set(a.id, a));
-    return map;
-  }, [alumni]);
 
   const activeConversation = conversations.find(c => c.id === activeConversationId);
 
@@ -106,7 +100,7 @@ const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId
   };
   
   const formatTime = (seconds: number) => {
-      const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+      const mins = Math.floor(seconds / 60);
       const secs = (seconds % 60).toString().padStart(2, '0');
       return `${mins}:${secs}`;
   }
@@ -128,7 +122,7 @@ const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId
     <div className="p-4 lg:p-8">
       <div className="mb-8">
         <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent mb-2">Messages</h2>
-        <p className="text-gray-600 dark:text-gray-400">Your private conversations with alumni</p>
+        <p className="text-gray-600 dark:text-gray-400">Your private conversations</p>
       </div>
 
       <div className="flex h-[70vh] bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
@@ -139,10 +133,10 @@ const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId
           </div>
           <div className="flex-1 overflow-y-auto">
             {conversations.map(convo => {
-              const otherParticipantId = convo.participantIds.find(id => id !== CURRENT_USER_ID);
-              const participant = otherParticipantId ? alumniMap.get(otherParticipantId) : null;
+              const otherParticipantId = convo.participantIds.find(id => id !== currentUser.id);
+              const participant = otherParticipantId ? users.get(otherParticipantId) : null;
               const lastMessage = convo.messages[convo.messages.length - 1];
-              const unread = lastMessage && lastMessage.authorId !== CURRENT_USER_ID && !lastMessage.read;
+              const unread = lastMessage && lastMessage.authorId !== currentUser.id && !lastMessage.read;
 
               return (
                 <div key={convo.id} onClick={() => setActiveConversationId(convo.id)} className={`flex items-center space-x-3 p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 ${activeConversationId === convo.id ? 'bg-green-50 dark:bg-gray-900' : ''}`}>
@@ -171,22 +165,22 @@ const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId
                     <ChevronLeft className="h-6 w-6" />
                 </button>
                 <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center font-bold text-gray-600 flex-shrink-0">
-                  {alumniMap.get(activeConversation.participantIds.find(id => id !== CURRENT_USER_ID)!)?.firstName.charAt(0)}
-                  {alumniMap.get(activeConversation.participantIds.find(id => id !== CURRENT_USER_ID)!)?.lastName.charAt(0)}
+                  {users.get(activeConversation.participantIds.find(id => id !== currentUser.id)!)?.firstName.charAt(0)}
+                  {users.get(activeConversation.participantIds.find(id => id !== currentUser.id)!)?.lastName.charAt(0)}
                 </div>
-                <h3 className="font-bold text-lg">{alumniMap.get(activeConversation.participantIds.find(id => id !== CURRENT_USER_ID)!)?.firstName} {alumniMap.get(activeConversation.participantIds.find(id => id !== CURRENT_USER_ID)!)?.lastName}</h3>
+                <h3 className="font-bold text-lg">{users.get(activeConversation.participantIds.find(id => id !== currentUser.id)!)?.firstName} {users.get(activeConversation.participantIds.find(id => id !== currentUser.id)!)?.lastName}</h3>
               </div>
 
               <div className="flex-1 p-6 overflow-y-auto bg-gray-50 dark:bg-gray-900 space-y-4">
                 {activeConversation.messages.map(msg => (
-                  <div key={msg.id} className={`flex ${msg.authorId === CURRENT_USER_ID ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${msg.authorId === CURRENT_USER_ID ? 'bg-green-600 text-white rounded-br-none' : 'bg-white dark:bg-gray-700 rounded-bl-none'}`}>
+                  <div key={msg.id} className={`flex ${msg.authorId === currentUser.id ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${msg.authorId === currentUser.id ? 'bg-green-700 text-white rounded-br-none' : 'bg-white dark:bg-gray-700 rounded-bl-none'}`}>
                       {msg.type === 'voice' ? (
-                        <VoiceNotePlayer duration={msg.duration || '0:00'} isSender={msg.authorId === CURRENT_USER_ID} />
+                        <VoiceNotePlayer duration={msg.duration || '0:00'} isSender={msg.authorId === currentUser.id} />
                       ) : (
                         <p>{msg.content}</p>
                       )}
-                      <p className="text-xs opacity-70 mt-1 text-right">{msg.timestamp}</p>
+                      <p className={`text-xs mt-1 text-right ${msg.authorId === currentUser.id ? 'opacity-90' : 'text-gray-500 dark:text-gray-400'}`}>{msg.timestamp}</p>
                     </div>
                   </div>
                 ))}
@@ -214,7 +208,7 @@ const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId
                     disabled={isRecording}
                   />
                   {newMessage ? (
-                    <button onClick={handleSend} className="p-3 bg-green-600 text-white rounded-full hover:bg-green-700 transition-colors">
+                    <button onClick={handleSend} className="p-3 bg-green-700 text-white rounded-full hover:bg-green-800 transition-colors">
                       <Send className="h-6 w-6" />
                     </button>
                   ) : (
@@ -223,7 +217,7 @@ const Messages: React.FC<Props> = ({ conversations, alumni, activeConversationId
                         onMouseUp={handleMicRelease}
                         onTouchStart={handleMicPress}
                         onTouchEnd={handleMicRelease}
-                        className={`p-3 rounded-full transition-colors ${isRecording ? 'bg-red-600 animate-pulse' : 'bg-green-600'} text-white hover:bg-green-700`}
+                        className={`p-3 rounded-full transition-colors ${isRecording ? 'bg-red-600 animate-pulse' : 'bg-green-700'} text-white hover:bg-green-800`}
                     >
                       <Mic className="h-6 w-6" />
                     </button>

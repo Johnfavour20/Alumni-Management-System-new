@@ -1,4 +1,3 @@
-
 export interface Alumni {
   id: number;
   firstName: string;
@@ -6,7 +5,7 @@ export interface Alumni {
   email: string;
   phone: string;
   graduationYear: string;
-  degree: 'MSc' | 'PhD' | '';
+  degree: Degree;
   program: string;
   currentPosition: string;
   company: string;
@@ -18,14 +17,19 @@ export interface Alumni {
   lastLogin: string;
   joinDate: string;
   skills: string[];
+  openToMentoring: boolean;
 }
+
+export type UserRole = 'Admin' | 'Alumnus' | 'Student';
+
+export type Degree = 'MSc' | 'PhD' | '';
 
 export interface User {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
-  role: 'Admin';
+  role: UserRole;
 }
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';

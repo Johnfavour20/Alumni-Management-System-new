@@ -19,7 +19,7 @@ const Toast: React.FC<Props> = ({ toast, onClose }) => {
   const colors = {
     success: 'bg-green-500',
     error: 'bg-red-500',
-    warning: 'bg-yellow-500',
+    warning: 'bg-yellow-700',
     info: 'bg-teal-500'
   };
   

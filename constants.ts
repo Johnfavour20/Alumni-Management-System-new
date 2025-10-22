@@ -29,7 +29,8 @@ export const INITIAL_ALUMNI_DATA: Alumni[] = [
     isActive: true,
     lastLogin: '2 days ago',
     joinDate: '2020-06-15',
-    skills: ['Python', 'Machine Learning', 'Cloud Computing']
+    skills: ['Python', 'Machine Learning', 'Cloud Computing'],
+    openToMentoring: true,
   },
   {
     id: 2,
@@ -49,7 +50,8 @@ export const INITIAL_ALUMNI_DATA: Alumni[] = [
     isActive: true,
     lastLogin: '1 day ago',
     joinDate: '2019-08-22',
-    skills: ['Artificial Intelligence', 'Deep Learning', 'Research']
+    skills: ['Artificial Intelligence', 'Deep Learning', 'Research'],
+    openToMentoring: true,
   },
   {
     id: 3,
@@ -69,7 +71,8 @@ export const INITIAL_ALUMNI_DATA: Alumni[] = [
     isActive: true,
     lastLogin: '5 hours ago',
     joinDate: '2021-07-10',
-    skills: ['Entrepreneurship', 'Business Strategy', 'Product Development']
+    skills: ['Entrepreneurship', 'Business Strategy', 'Product Development'],
+    openToMentoring: false,
   },
   {
     id: 4,
@@ -89,7 +92,8 @@ export const INITIAL_ALUMNI_DATA: Alumni[] = [
     isActive: false,
     lastLogin: '2 weeks ago',
     joinDate: '2018-05-20',
-    skills: ['Fintech', 'Digital Banking', 'Leadership']
+    skills: ['Fintech', 'Digital Banking', 'Leadership'],
+    openToMentoring: false,
   },
   {
     id: 5,
@@ -109,7 +113,8 @@ export const INITIAL_ALUMNI_DATA: Alumni[] = [
     isActive: true,
     lastLogin: '3 hours ago',
     joinDate: '2022-09-01',
-    skills: ['Academic Research', 'Data Science', 'Teaching']
+    skills: ['Academic Research', 'Data Science', 'Teaching'],
+    openToMentoring: true,
   },
   {
     id: 6,
@@ -129,8 +134,26 @@ export const INITIAL_ALUMNI_DATA: Alumni[] = [
     isActive: true,
     lastLogin: '1 hour ago',
     joinDate: '2020-11-30',
-    skills: ['DevOps', 'Cloud Computing', 'System Architecture']
+    skills: ['DevOps', 'Cloud Computing', 'System Architecture'],
+    openToMentoring: false,
   }
+];
+
+export const INITIAL_STUDENT_DATA: User[] = [
+    {
+        id: 101,
+        firstName: 'Femi',
+        lastName: 'Adebayo',
+        email: 'femi.adebayo@student.uniport.edu',
+        role: 'Student',
+    },
+    {
+        id: 102,
+        firstName: 'Bisi',
+        lastName: 'Akande',
+        email: 'bisi.akande@student.uniport.edu',
+        role: 'Student',
+    }
 ];
 
 export const NOTIFICATIONS = [
@@ -146,7 +169,7 @@ export const INITIAL_POSTS_DATA: Post[] = [
     authorId: 3,
     content: "Excited to announce that TechFlow Solutions has secured Series A funding! We're hiring for several roles, especially in product development. Check out our careers page or DM me if you're interested. #TechFlow #StartupLife #Hiring",
     timestamp: "2 hours ago",
-    likes: [1, 2, 5, 6],
+    likes: [1, 2, 5, 6, 101],
     comments: [
       { id: 1, authorId: 1, content: "Huge congratulations, Chioma! This is amazing news.", timestamp: "1 hour ago" },
       { id: 2, authorId: 6, content: "Well deserved! I'll definitely check out the open roles.", timestamp: "30 minutes ago" },
@@ -165,7 +188,7 @@ export const INITIAL_POSTS_DATA: Post[] = [
     authorId: 5,
     content: "Presenting my latest research on Data Science in education at the upcoming IEEE conference in Abuja. It's great to see so much innovation in the field. Any other alumni attending?",
     timestamp: "2 days ago",
-    likes: [1, 2],
+    likes: [1, 2, 102],
     comments: [
       { id: 3, authorId: 2, content: "Fantastic, Ngozi! I'll be there. Let's connect.", timestamp: "1 day ago" }
     ]

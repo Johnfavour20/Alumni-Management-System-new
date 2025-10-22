@@ -1,16 +1,35 @@
 
 import React from 'react';
 import { Home, Database, BarChart3, X, MessageSquare, Mail, Send, User } from './icons';
-import type { Page } from '../types';
+import type { Page, User as CurrentUser } from '../types';
 
 interface Props {
   currentPage: Page;
   setCurrentPage: (page: Page) => void;
   sidebarOpen: boolean;
   setSidebarOpen: (open: boolean) => void;
+  currentUser: CurrentUser | null;
 }
 
-const MobileSidebar: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen }) => {
+const MobileSidebar: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOpen, setSidebarOpen, currentUser }) => {
+  const allLinks = [
+    { name: 'Dashboard', icon: Home, page: 'dashboard' as Page, roles: ['Admin'] },
+    { name: 'Alumni Records', icon: Database, page: 'alumni' as Page, roles: ['Admin', 'Student'] },
+    { name: 'Community', icon: MessageSquare, page: 'community' as Page, roles: ['Admin', 'Alumnus', 'Student'] },
+    { name: 'Messages', icon: Mail, page: 'messages' as Page, roles: ['Admin', 'Alumnus', 'Student'] },
+    { name: 'Analytics', icon: BarChart3, page: 'analytics' as Page, roles: ['Admin'] },
+    { name: 'Newsletter', icon: Send, page: 'newsletter' as Page, roles: ['Admin'] },
+    { name: 'Profile', icon: User, page: 'profile' as Page, roles: ['Admin', 'Alumnus', 'Student'] }
+  ];
+
+  const visibleLinks = allLinks.filter(link => currentUser && link.roles.includes(currentUser.role));
+
+  const getPageName = (page: Page) => {
+    if (page === 'alumni' && currentUser?.role === 'Student') return 'Find a Mentor';
+    const link = allLinks.find(l => l.page === page);
+    return link ? link.name : 'Dashboard';
+  }
+
   return (
     <div className={`lg:hidden fixed inset-0 z-50 transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
       <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setSidebarOpen(false)}></div>
@@ -24,15 +43,7 @@ const MobileSidebar: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOp
           </div>
         </div>
         <nav className="p-6 space-y-4">
-          {[
-            { name: 'Dashboard', icon: Home, page: 'dashboard' as Page },
-            { name: 'Alumni Records', icon: Database, page: 'alumni' as Page },
-            { name: 'Community', icon: MessageSquare, page: 'community' as Page },
-            { name: 'Messages', icon: Mail, page: 'messages' as Page },
-            { name: 'Analytics', icon: BarChart3, page: 'analytics' as Page },
-            { name: 'Newsletter', icon: Send, page: 'newsletter' as Page },
-            { name: 'Profile', icon: User, page: 'profile' as Page }
-          ].map(item => (
+          {visibleLinks.map(item => (
             <button
               key={item.page}
               onClick={() => { setCurrentPage(item.page); setSidebarOpen(false); }}
@@ -43,7 +54,7 @@ const MobileSidebar: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOp
               }`}
             >
               <item.icon className="h-5 w-5" />
-              <span className="font-medium">{item.name}</span>
+              <span className="font-medium">{getPageName(item.page)}</span>
             </button>
           ))}
         </nav>

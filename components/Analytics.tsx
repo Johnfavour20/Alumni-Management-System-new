@@ -18,20 +18,21 @@ const Analytics: React.FC<Props> = ({ alumni }) => {
   const highestSalary = salaries.length > 0 ? Math.max(...salaries) : 0;
   const lowestSalary = salaries.length > 0 ? Math.min(...salaries) : 0;
   
-  // FIX: Explicitly type the accumulator for the reduce function to ensure correct type inference.
-  const geoDistribution = alumni.reduce<Record<string, number>>((acc, person) => {
+  // FIX: Explicitly type the accumulator and cast the initial value for the reduce function to ensure correct type inference.
+  const geoDistribution = alumni.reduce((acc: Record<string, number>, person) => {
     const city = person.location.split(',')[0];
     acc[city] = (acc[city] || 0) + 1;
     return acc;
-  }, {});
+  }, {} as Record<string, number>);
 
   const topEmployers = Object.entries(
-    // FIX: Explicitly type the accumulator for the reduce function to ensure correct type inference and resolve the sort function type error.
-    alumni.reduce<Record<string, number>>((acc, person) => {
+    // FIX: Explicitly type the accumulator and cast the initial value for the reduce function to ensure correct type inference and resolve the sort function type error.
+    alumni.reduce((acc: Record<string, number>, person) => {
       acc[person.company] = (acc[person.company] || 0) + 1;
       return acc;
-    }, {})
-  ).sort(([,a], [,b]) => b - a).slice(0, 5);
+    }, {} as Record<string, number>)
+    // FIX: Cast `a` and `b` to numbers to resolve sort function type error.
+  ).sort(([,a], [,b]) => Number(b) - Number(a)).slice(0, 5);
   
   return (
     <div className="p-4 lg:p-8">
@@ -51,7 +52,7 @@ const Analytics: React.FC<Props> = ({ alumni }) => {
         <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
           <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center"><MapPin className="h-6 w-6 text-green-500 mr-2" />Geographic Distribution</h3>
           <div className="space-y-4 max-h-48 overflow-y-auto">
-            {Object.entries(geoDistribution).map(([city, count]) => (<div key={city} className="flex items-center justify-between"><span className="text-gray-700 dark:text-gray-300">{city}</span><div className="flex items-center space-x-3"><div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-3"><div className="h-full bg-gradient-to-r from-green-500 to-green-700 rounded-full transition-all duration-1000" style={{ width: `${(count / totalAlumni) * 100}%` }}></div></div><span className="text-sm font-medium w-12">{count}</span></div></div>))}
+            {Object.entries(geoDistribution).map(([city, count]) => (<div key={city} className="flex items-center justify-between"><span className="text-gray-700 dark:text-gray-300">{city}</span><div className="flex items-center space-x-3"><div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-3">{/* FIX: Cast `count` to a number to resolve arithmetic operation type error. */}<div className="h-full bg-gradient-to-r from-green-500 to-green-700 rounded-full transition-all duration-1000" style={{ width: `${(Number(count) / totalAlumni) * 100}%` }}></div></div><span className="text-sm font-medium w-12">{count}</span></div></div>))}
           </div>
         </div>
       </div>

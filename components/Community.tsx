@@ -1,27 +1,21 @@
 
-import React, { useState, useMemo } from 'react';
-import type { Post, Alumni } from '../types';
-import { CURRENT_USER_ID } from '../constants';
+import React, { useState } from 'react';
+import type { Post, Alumni, User } from '../types';
 import { ThumbsUp, MessageCircle, Send } from './icons';
 
 interface Props {
   posts: Post[];
-  alumni: Alumni[];
+  users: Map<number, User | Alumni>;
+  currentUser: User;
   onLikePost: (postId: number) => void;
   onAddComment: (postId: number, content: string) => void;
   onCreatePost: (content: string) => void;
 }
 
-const Community: React.FC<Props> = ({ posts, alumni, onLikePost, onAddComment, onCreatePost }) => {
+const Community: React.FC<Props> = ({ posts, users, currentUser, onLikePost, onAddComment, onCreatePost }) => {
   const [newPostContent, setNewPostContent] = useState('');
   const [commentingPostId, setCommentingPostId] = useState<number | null>(null);
   const [newCommentContent, setNewCommentContent] = useState('');
-
-  const alumniMap = useMemo(() => {
-    const map = new Map<number, Alumni>();
-    alumni.forEach(a => map.set(a.id, a));
-    return map;
-  }, [alumni]);
 
   const handlePostSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +37,7 @@ const Community: React.FC<Props> = ({ posts, alumni, onLikePost, onAddComment, o
     <div className="p-4 lg:p-8 max-w-4xl mx-auto">
       <div className="mb-8">
         <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent mb-2">Community Feed</h2>
-        <p className="text-gray-600 dark:text-gray-400">Share updates and connect with fellow alumni</p>
+        <p className="text-gray-600 dark:text-gray-400">Share updates and connect with fellow alumni and students</p>
       </div>
 
       <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg mb-8">
@@ -64,7 +58,7 @@ const Community: React.FC<Props> = ({ posts, alumni, onLikePost, onAddComment, o
 
       <div className="space-y-8">
         {posts.map(post => {
-          const author = alumniMap.get(post.authorId);
+          const author = users.get(post.authorId);
           return (
             <div key={post.id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
               <div className="flex items-start space-x-4 mb-4">
@@ -72,7 +66,12 @@ const Community: React.FC<Props> = ({ posts, alumni, onLikePost, onAddComment, o
                     {author ? `${author.firstName.charAt(0)}${author.lastName.charAt(0)}` : 'A'}
                 </div>
                 <div className="flex-1">
-                    <p className="font-bold text-gray-900 dark:text-white">{author ? `${author.firstName} ${author.lastName}` : 'Anonymous'}</p>
+                    <div className="flex items-center space-x-2">
+                        <p className="font-bold text-gray-900 dark:text-white">{author ? `${author.firstName} ${author.lastName}` : 'Anonymous'}</p>
+                        {author && author.role === 'Student' && (
+                            <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800 dark:bg-teal-800 dark:text-teal-100">Student</span>
+                        )}
+                    </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400">{post.timestamp}</p>
                 </div>
               </div>
@@ -85,7 +84,7 @@ const Community: React.FC<Props> = ({ posts, alumni, onLikePost, onAddComment, o
               </div>
 
               <div className="border-t border-b border-gray-200 dark:border-gray-700 flex justify-around">
-                <button onClick={() => onLikePost(post.id)} className={`flex-1 flex items-center justify-center space-x-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${post.likes.includes(CURRENT_USER_ID) ? 'text-green-500' : ''}`}>
+                <button onClick={() => onLikePost(post.id)} className={`flex-1 flex items-center justify-center space-x-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors ${post.likes.includes(currentUser.id) ? 'text-green-500' : ''}`}>
                     <ThumbsUp className="h-5 w-5" /><span>Like</span>
                 </button>
                 <button onClick={() => setCommentingPostId(commentingPostId === post.id ? null : post.id)} className="flex-1 flex items-center justify-center space-x-2 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
@@ -96,14 +95,19 @@ const Community: React.FC<Props> = ({ posts, alumni, onLikePost, onAddComment, o
               {commentingPostId === post.id && (
                 <div className="mt-4 space-y-4">
                     {post.comments.map(comment => {
-                        const commentAuthor = alumniMap.get(comment.authorId);
+                        const commentAuthor = users.get(comment.authorId);
                         return (
                              <div key={comment.id} className="flex items-start space-x-3">
                                 <div className="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0">
                                     {commentAuthor ? `${commentAuthor.firstName.charAt(0)}${commentAuthor.lastName.charAt(0)}` : 'A'}
                                 </div>
                                 <div className="flex-1 bg-gray-100 dark:bg-gray-700 p-3 rounded-lg">
-                                    <p className="font-semibold text-sm">{commentAuthor ? `${commentAuthor.firstName} ${commentAuthor.lastName}` : 'Anonymous'}</p>
+                                    <div className="flex items-center space-x-2">
+                                        <p className="font-semibold text-sm">{commentAuthor ? `${commentAuthor.firstName} ${commentAuthor.lastName}` : 'Anonymous'}</p>
+                                        {commentAuthor && commentAuthor.role === 'Student' && (
+                                            <span className="px-1.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800 dark:bg-teal-800 dark:text-teal-100">Student</span>
+                                        )}
+                                    </div>
                                     <p className="text-sm">{comment.content}</p>
                                 </div>
                             </div>

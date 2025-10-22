@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import type { Alumni, ModalType } from '../types';
+import type { Alumni, ModalType, Degree, User } from '../types';
 import { 
   X, Mail, Phone, MapPin, GraduationCap, Building2, DollarSign, 
   Globe, ExternalLink, Activity, Award, Zap, Loader 
@@ -9,6 +8,7 @@ import {
 interface Props {
   modalType: ModalType;
   selectedAlumni: Alumni | null;
+  currentUser: User;
   onClose: () => void;
   onSave: (alumni: Omit<Alumni, 'id' | 'isActive' | 'lastLogin' | 'joinDate'>, id?: number) => Promise<void>;
   isLoading: boolean;
@@ -21,7 +21,7 @@ const INITIAL_FORM_DATA = {
   email: '',
   phone: '',
   graduationYear: '',
-  degree: '' as 'MSc' | 'PhD' | '',
+  degree: '' as Degree,
   program: 'Computer Science',
   currentPosition: '',
   company: '',
@@ -29,17 +29,21 @@ const INITIAL_FORM_DATA = {
   salary: '',
   linkedin: '',
   achievements: '',
-  skills: ''
+  skills: '',
+  openToMentoring: false
 };
 
-const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, onClose, onSave, isLoading, onStartConversation }) => {
+const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, currentUser, onClose, onSave, isLoading, onStartConversation }) => {
   const [formData, setFormData] = useState(INITIAL_FORM_DATA);
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
+  const isStudentView = currentUser.role === 'Student';
+  const isEditingOwnProfile = modalType === 'edit' && selectedAlumni?.id === currentUser.id;
 
   useEffect(() => {
     if ((modalType === 'edit' || modalType === 'view') && selectedAlumni) {
       const { achievements, skills, ...rest } = selectedAlumni;
       setFormData({
+        ...INITIAL_FORM_DATA, // Ensure all fields are present
         ...rest,
         achievements: Array.isArray(achievements) ? achievements.join(', ') : '',
         skills: Array.isArray(skills) ? skills.join(', ') : ''
@@ -66,8 +70,11 @@ const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, onClose, onSa
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, value, type } = e.target;
+    const isCheckbox = type === 'checkbox';
+    // FIX: Correctly access 'checked' property for checkbox input type to ensure boolean value is captured.
+    const inputValue = isCheckbox ? (e.target as HTMLInputElement).checked : value;
+    setFormData({ ...formData, [name]: inputValue });
     if (validationErrors[name]) {
       setValidationErrors({ ...validationErrors, [name]: '' });
     }
@@ -130,7 +137,7 @@ const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, onClose, onSa
                         className="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm font-medium"
                     >
                         <Mail className="h-4 w-4" />
-                        <span>Message</span>
+                        <span>{isStudentView ? 'Request to Connect' : 'Message'}</span>
                     </button>
                 </div>
              </div>
@@ -138,15 +145,15 @@ const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, onClose, onSa
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                <div className="space-y-4">
                  <div className="flex items-center space-x-3"><Mail className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">{selectedAlumni.email}</span></div>
-                 <div className="flex items-center space-x-3"><Phone className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">{selectedAlumni.phone}</span></div>
+                 {!isStudentView && <div className="flex items-center space-x-3"><Phone className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">{selectedAlumni.phone}</span></div>}
                  <div className="flex items-center space-x-3"><MapPin className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">{selectedAlumni.location}</span></div>
                  <div className="flex items-center space-x-3"><GraduationCap className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">{selectedAlumni.degree} {selectedAlumni.program} ({selectedAlumni.graduationYear})</span></div>
                </div>
                <div className="space-y-4">
                  <div className="flex items-center space-x-3"><Building2 className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">{selectedAlumni.company}</span></div>
-                 <div className="flex items-center space-x-3"><DollarSign className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">₦{(Number(selectedAlumni.salary) || 0).toLocaleString()}</span></div>
+                 {!isStudentView && <div className="flex items-center space-x-3"><DollarSign className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">₦{(Number(selectedAlumni.salary) || 0).toLocaleString()}</span></div>}
                  <div className="flex items-center space-x-3"><Globe className="h-5 w-5 text-green-500" /><a href={`https://${selectedAlumni.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300 flex items-center space-x-1"><span>LinkedIn Profile</span><ExternalLink className="h-4 w-4" /></a></div>
-                 <div className="flex items-center space-x-3"><Activity className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">Last login: {selectedAlumni.lastLogin}</span></div>
+                 {!isStudentView && <div className="flex items-center space-x-3"><Activity className="h-5 w-5 text-green-500" /><span className="text-gray-900 dark:text-white">Last login: {selectedAlumni.lastLogin}</span></div>}
                </div>
              </div>
 
@@ -157,6 +164,21 @@ const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, onClose, onSa
 
             {(modalType === 'add' || modalType === 'edit') && (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {isEditingOwnProfile && (
+                  <div className="bg-green-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <label htmlFor="openToMentoring" className="flex items-center space-x-3 cursor-pointer">
+                      <input 
+                        type="checkbox"
+                        id="openToMentoring"
+                        name="openToMentoring"
+                        checked={formData.openToMentoring}
+                        onChange={handleInputChange}
+                        className="h-5 w-5 rounded text-green-500 focus:ring-green-500"
+                      />
+                      <span className="font-medium text-gray-800 dark:text-gray-200">Open to Mentoring Students</span>
+                    </label>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">First Name *</label>
