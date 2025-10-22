@@ -1,7 +1,5 @@
 {
   "name": "Alumni Management System",
   "description": "A comprehensive system to manage, track, and analyze alumni data for the University of Port Harcourt Computer Science department. Features include detailed alumni profiles, advanced search and filtering, data visualization, and an analytics dashboard.",
-  "requestFramePermissions": [
-    "microphone"
-  ]
+  "requestFramePermissions": []
 }

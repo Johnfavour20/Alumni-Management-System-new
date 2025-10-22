@@ -6,7 +6,7 @@ export {
   CheckCircle, XCircle, Loader, RefreshCw, FileText, UserPlus, Grid, List,
   SortAsc, SortDesc, Building2, DollarSign, ExternalLink,
   MessageSquare, ThumbsUp, MessageCircle, Send, ChevronLeft,
-  Mic, Play, Pause, User, Save, Key,
+  User, Save, Key,
   // FIX: Added 'LogIn' to the exports to resolve import error in LoginPage.
   LogIn,
   Bold, Italic, Underline, ListOrdered, List as ListIcon, Code

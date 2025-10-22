@@ -72,8 +72,7 @@ export interface Message {
   content: string;
   timestamp: string;
   read: boolean;
-  type: 'text' | 'voice';
-  duration?: string; // e.g., "0:15"
+  type: 'text';
 }
 
 export interface Conversation {

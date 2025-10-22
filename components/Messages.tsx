@@ -1,7 +1,6 @@
-
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import type { Conversation, Alumni, User } from '../types';
-import { Send, Mail, ChevronLeft, Mic, Play, Pause } from './icons';
+import { Send, Mail, ChevronLeft } from './icons';
 
 interface Props {
   conversations: Conversation[];
@@ -10,112 +9,23 @@ interface Props {
   activeConversationId: number | null;
   setActiveConversationId: (id: number | null) => void;
   onSendMessage: (conversationId: number, content: string) => void;
-  onSendVoiceNote: (conversationId: number, duration: string) => void;
-  typingInfo: { conversationId: number, participantName: string } | null;
 }
 
-const VoiceNotePlayer: React.FC<{ duration: string, isSender: boolean }> = ({ duration, isSender }) => {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [progress, setProgress] = useState(0);
-    const intervalRef = useRef<number | null>(null);
-    const audioDuration = useMemo(() => {
-        const [minutes, seconds] = duration.split(':').map(Number);
-        return minutes * 60 + seconds;
-    }, [duration]);
-
-    useEffect(() => {
-        return () => {
-            if (intervalRef.current) clearInterval(intervalRef.current);
-        };
-    }, []);
-
-    const togglePlay = () => {
-        if (isPlaying) {
-            if (intervalRef.current) clearInterval(intervalRef.current);
-            setIsPlaying(false);
-        } else {
-            setIsPlaying(true);
-            intervalRef.current = window.setInterval(() => {
-                setProgress(prev => {
-                    if (prev >= 100) {
-                        if (intervalRef.current) clearInterval(intervalRef.current);
-                        setIsPlaying(false);
-                        return 0;
-                    }
-                    return prev + 100 / audioDuration;
-                });
-            }, 1000);
-        }
-    };
-    
-    const progressColor = isSender ? 'bg-white/50' : 'bg-green-500/50';
-    const textColor = isSender ? 'text-white' : 'text-gray-700 dark:text-gray-300';
-    const iconColor = isSender ? 'text-white' : 'text-green-500';
-
-    return (
-        <div className={`flex items-center space-x-2 ${textColor}`}>
-            <button onClick={togglePlay} className={`${iconColor}`}>
-                {isPlaying ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
-            </button>
-            <div className="w-32 h-1 bg-gray-300/50 rounded-full">
-                <div className={`h-1 rounded-full ${progressColor}`} style={{ width: `${progress}%` }}></div>
-            </div>
-            <span className="text-xs font-mono">{duration}</span>
-        </div>
-    );
-};
-
-const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeConversationId, setActiveConversationId, onSendMessage, onSendVoiceNote, typingInfo }) => {
+const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeConversationId, setActiveConversationId, onSendMessage }) => {
   const [newMessage, setNewMessage] = useState('');
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingTime, setRecordingTime] = useState(0);
-  const recordingIntervalRef = useRef<number | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const activeConversation = conversations.find(c => c.id === activeConversationId);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [activeConversation, typingInfo]);
-  
-  useEffect(() => {
-      if (isRecording) {
-          recordingIntervalRef.current = window.setInterval(() => {
-              setRecordingTime(prev => prev + 1);
-          }, 1000);
-      } else {
-          if (recordingIntervalRef.current) clearInterval(recordingIntervalRef.current);
-          setRecordingTime(0);
-      }
-      return () => {
-          if (recordingIntervalRef.current) clearInterval(recordingIntervalRef.current);
-      }
-  }, [isRecording]);
+  }, [activeConversation]);
 
   const handleSend = () => {
     if (newMessage.trim() && activeConversationId !== null) {
       onSendMessage(activeConversationId, newMessage);
       setNewMessage('');
     }
-  };
-  
-  const formatTime = (seconds: number) => {
-      const mins = Math.floor(seconds / 60);
-      const secs = (seconds % 60).toString().padStart(2, '0');
-      return `${mins}:${secs}`;
-  }
-
-  const handleMicPress = () => {
-      navigator.mediaDevices.getUserMedia({ audio: true })
-          .then(() => setIsRecording(true))
-          .catch(err => alert("Microphone access is required for voice notes."));
-  };
-  
-  const handleMicRelease = () => {
-      setIsRecording(false);
-      if (activeConversationId !== null && recordingTime > 0) {
-        onSendVoiceNote(activeConversationId, formatTime(recordingTime));
-      }
   };
   
   return (
@@ -148,7 +58,7 @@ const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeCo
                       <p className={`font-semibold truncate ${unread ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>{participant ? `${participant.firstName} ${participant.lastName}` : 'Unknown'}</p>
                       {unread && <div className="w-2.5 h-2.5 bg-green-500 rounded-full flex-shrink-0"></div>}
                     </div>
-                    <p className={`text-sm truncate ${unread ? 'text-gray-700 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400'}`}>{lastMessage?.type === 'voice' ? 'Voice Note' : lastMessage?.content}</p>
+                    <p className={`text-sm truncate ${unread ? 'text-gray-700 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400'}`}>{lastMessage?.content}</p>
                   </div>
                 </div>
               );
@@ -175,24 +85,11 @@ const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeCo
                 {activeConversation.messages.map(msg => (
                   <div key={msg.id} className={`flex ${msg.authorId === currentUser.id ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${msg.authorId === currentUser.id ? 'bg-green-700 text-white rounded-br-none' : 'bg-white dark:bg-gray-700 rounded-bl-none'}`}>
-                      {msg.type === 'voice' ? (
-                        <VoiceNotePlayer duration={msg.duration || '0:00'} isSender={msg.authorId === currentUser.id} />
-                      ) : (
-                        <p>{msg.content}</p>
-                      )}
+                      <p>{msg.content}</p>
                       <p className={`text-xs mt-1 text-right ${msg.authorId === currentUser.id ? 'opacity-90' : 'text-gray-500 dark:text-gray-400'}`}>{msg.timestamp}</p>
                     </div>
                   </div>
                 ))}
-                {typingInfo && typingInfo.conversationId === activeConversationId && (
-                  <div className="flex justify-start">
-                      <div className="max-w-xs lg:max-w-md px-4 py-3 rounded-2xl bg-white dark:bg-gray-700 rounded-bl-none flex items-center space-x-2">
-                          <span className="typing-dot">.</span>
-                          <span className="typing-dot">.</span>
-                          <span className="typing-dot">.</span>
-                      </div>
-                  </div>
-                )}
                 <div ref={chatEndRef} />
               </div>
 
@@ -200,28 +97,15 @@ const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeCo
                 <div className="flex items-center space-x-3">
                   <input
                     type="text"
-                    value={isRecording ? '' : newMessage}
+                    value={newMessage}
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                    placeholder={isRecording ? `Recording... ${formatTime(recordingTime)}` : "Type a message..."}
+                    placeholder="Type a message..."
                     className="flex-1 px-4 py-3 rounded-full border border-gray-300 dark:border-gray-600 focus:outline-none focus:border-green-500 dark:bg-gray-700"
-                    disabled={isRecording}
                   />
-                  {newMessage ? (
-                    <button onClick={handleSend} className="p-3 bg-green-700 text-white rounded-full hover:bg-green-800 transition-colors">
-                      <Send className="h-6 w-6" />
-                    </button>
-                  ) : (
-                    <button 
-                        onMouseDown={handleMicPress}
-                        onMouseUp={handleMicRelease}
-                        onTouchStart={handleMicPress}
-                        onTouchEnd={handleMicRelease}
-                        className={`p-3 rounded-full transition-colors ${isRecording ? 'bg-red-600 animate-pulse' : 'bg-green-700'} text-white hover:bg-green-800`}
-                    >
-                      <Mic className="h-6 w-6" />
-                    </button>
-                  )}
+                  <button onClick={handleSend} className="p-3 bg-green-700 text-white rounded-full hover:bg-green-800 transition-colors">
+                    <Send className="h-6 w-6" />
+                  </button>
                 </div>
               </div>
             </>

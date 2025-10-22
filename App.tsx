@@ -37,7 +37,6 @@ const App: React.FC = () => {
   const [posts, setPosts] = useState<Post[]>(INITIAL_POSTS_DATA);
   const [conversations, setConversations] = useState<Conversation[]>(INITIAL_CONVERSATIONS_DATA);
   const [activeConversationId, setActiveConversationId] = useState<number | null>(null);
-  const [typingInfo, setTypingInfo] = useState<{ conversationId: number, participantName: string } | null>(null);
 
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState<ModalType>('view');
@@ -275,35 +274,7 @@ const App: React.FC = () => {
         setPosts([newPost, ...posts]);
         showToast('Post created successfully!', 'success');
     };
-
-    const simulateResponse = (conversationId: number) => {
-        if (!currentUser) return;
-        const conversation = conversations.find(c => c.id === conversationId);
-        if (!conversation) return;
     
-        const otherParticipantId = conversation.participantIds.find(id => id !== currentUser.id);
-        const participant = allUsersMap.get(otherParticipantId!);
-        if (!participant) return;
-    
-        setTimeout(() => setTypingInfo({ conversationId, participantName: participant.firstName }), 1000);
-    
-        setTimeout(() => {
-          setTypingInfo(null);
-          const responses = ["That's interesting!", "Thanks for letting me know.", "I'll get back to you soon."];
-          const reply: Message = {
-            id: Date.now(),
-            authorId: participant.id,
-            content: responses[Math.floor(Math.random() * responses.length)],
-            timestamp: 'Just now',
-            read: false,
-            type: 'text'
-          };
-          setConversations(convos => convos.map(c => 
-            c.id === conversationId ? { ...c, messages: [...c.messages, reply] } : c
-          ));
-        }, 3000 + Math.random() * 2000);
-      };
-      
     const handleStartConversation = (alumniId: number) => {
         if (!currentUser) return;
         let conversation = conversations.find(c => c.participantIds.includes(alumniId) && c.participantIds.includes(currentUser!.id));
@@ -320,14 +291,6 @@ const App: React.FC = () => {
         if (!currentUser) return;
         const newMessage: Message = { id: Date.now(), authorId: currentUser.id, content, timestamp: 'Just now', read: true, type: 'text' };
         setConversations(conversations.map(c => c.id === conversationId ? { ...c, messages: [...c.messages, newMessage] } : c));
-        simulateResponse(conversationId);
-    };
-
-    const handleSendVoiceNote = (conversationId: number, duration: string) => {
-        if (!currentUser) return;
-        const newVoiceNote: Message = { id: Date.now(), authorId: currentUser.id, content: 'Voice Note', timestamp: 'Just now', read: true, type: 'voice', duration };
-        setConversations(convos => convos.map(c => c.id === conversationId ? { ...c, messages: [...c.messages, newVoiceNote] } : c));
-        simulateResponse(conversationId);
     };
 
     const setActiveConversationAndReadMessages = (id: number | null) => {
@@ -354,7 +317,7 @@ const App: React.FC = () => {
       case 'dashboard': return <Dashboard alumni={alumni} animateCards={animateCards} />;
       case 'alumni': return <AlumniRecords alumni={alumni} currentUser={currentUser} animateCards={animateCards} openModal={openModal} confirmDelete={confirmDelete} onStartConversation={handleStartConversation} />;
       case 'community': return <Community users={allUsersMap} posts={posts} currentUser={currentUser} onLikePost={handleLikePost} onAddComment={handleAddComment} onCreatePost={handleCreatePost} />;
-      case 'messages': return <Messages conversations={conversations} users={allUsersMap} currentUser={currentUser} activeConversationId={activeConversationId} setActiveConversationId={setActiveConversationAndReadMessages} onSendMessage={handleSendMessage} onSendVoiceNote={handleSendVoiceNote} typingInfo={typingInfo} />;
+      case 'messages': return <Messages conversations={conversations} users={allUsersMap} currentUser={currentUser} activeConversationId={activeConversationId} setActiveConversationId={setActiveConversationAndReadMessages} onSendMessage={handleSendMessage} />;
       case 'analytics': return <Analytics alumni={alumni} />;
       case 'newsletter': return <Newsletter alumni={alumni} showToast={showToast} />;
       case 'profile': return <Profile user={currentUser} onUpdateUser={handleUpdateUser} showToast={showToast} />;
