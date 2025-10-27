@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Home, Database, BarChart3, GraduationCap, Bell, Menu, X, MessageSquare, Mail, Send, User, LogOut } from './icons';
 import type { Page, User as CurrentUser } from '../types';
@@ -57,7 +56,7 @@ const Navigation: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOpen,
                 <h1 className="text-xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent">
                   UNIPORT CS Alumni
                 </h1>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Management System</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Management System</p>
               </div>
             </div>
           </div>
@@ -110,7 +109,7 @@ const Navigation: React.FC<Props> = ({ currentPage, setCurrentPage, sidebarOpen,
                           <div className={`w-2 h-2 rounded-full mt-2 ${notification.type === 'success' ? 'bg-green-500' : 'bg-green-400'}`}></div>
                           <div className="flex-1">
                             <p className="text-sm">{notification.text}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{notification.time}</p>
+                            <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{notification.time}</p>
                           </div>
                         </div>
                       </div>

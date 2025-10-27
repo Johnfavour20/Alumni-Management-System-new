@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { Alumni } from '../types';
 import { AlertTriangle, Trash2, Loader } from './icons';
@@ -20,7 +19,7 @@ const DeleteConfirmModal: React.FC<Props> = ({ alumniToDelete, onClose, onConfir
           <AlertTriangle className="h-8 w-8 text-red-500" />
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">Confirm Deletion</h3>
         </div>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <p className="text-base text-gray-700 dark:text-gray-300 mb-6">
           Are you sure you want to delete <span className="font-semibold">{alumniToDelete.firstName} {alumniToDelete.lastName}</span>? 
           This action cannot be undone.
         </p>

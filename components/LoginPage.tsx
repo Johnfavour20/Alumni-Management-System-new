@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Key, LogIn, GraduationCap, Loader } from './icons';
+import { Mail, Key, LogIn, GraduationCap, Loader, User } from './icons';
 
 interface Props {
   onLogin: (email: string, password: string) => Promise<void>;
@@ -21,6 +21,16 @@ const LoginPage: React.FC<Props> = ({ onLogin, isLoading, onSwitchToSignUp }) =>
     }
     onLogin(email, password);
   };
+  
+  const handleQuickLogin = (role: 'Admin' | 'Alumnus' | 'Student') => {
+    // Pre-defined credentials for testing
+    const credentials = {
+        Admin: { email: 'admin@uniport-cs.edu', password: 'password' },
+        Alumnus: { email: 'adaora.okafor@gmail.com', password: 'password' }, // First alumnus
+        Student: { email: 'femi.adebayo@student.uniport.edu', password: 'password' } // First student
+    };
+    onLogin(credentials[role].email, credentials[role].password);
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4 transition-colors duration-300">
@@ -31,7 +41,7 @@ const LoginPage: React.FC<Props> = ({ onLogin, isLoading, onSwitchToSignUp }) =>
                <GraduationCap className="h-12 w-12 text-green-500" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">UNIPORT CS Alumni & Student Portal</h2>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Sign in to continue</p>
+            <p className="text-lg text-gray-700 dark:text-gray-300 mt-1">Sign in to continue</p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -52,7 +62,7 @@ const LoginPage: React.FC<Props> = ({ onLogin, isLoading, onSwitchToSignUp }) =>
               </div>
             </div>
             <div>
-              <label htmlFor="password" c lassName="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
               <div className="mt-1 relative">
                 <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
@@ -87,12 +97,27 @@ const LoginPage: React.FC<Props> = ({ onLogin, isLoading, onSwitchToSignUp }) =>
             </div>
           </form>
           <div className="mt-6 text-center text-sm">
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-gray-600 dark:text-gray-400">
                 Don't have an account?{' '}
                 <button onClick={onSwitchToSignUp} className="font-medium text-green-600 hover:text-green-500 focus:outline-none">
                     Sign Up
                 </button>
             </p>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+             <p className="text-center text-sm font-medium text-gray-500 dark:text-gray-400 mb-4">For Testing: Quick Login</p>
+             <div className="space-y-3">
+                 <button onClick={() => handleQuickLogin('Admin')} disabled={isLoading} className="w-full flex items-center justify-center space-x-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50">
+                     <User className="h-4 w-4 text-green-500"/><span>Login as Admin</span>
+                 </button>
+                 <button onClick={() => handleQuickLogin('Alumnus')} disabled={isLoading} className="w-full flex items-center justify-center space-x-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50">
+                    <GraduationCap className="h-4 w-4 text-green-500"/><span>Login as Alumnus</span>
+                 </button>
+                 <button onClick={() => handleQuickLogin('Student')} disabled={isLoading} className="w-full flex items-center justify-center space-x-2 py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50">
+                    <User className="h-4 w-4 text-green-500"/><span>Login as Student</span>
+                 </button>
+             </div>
           </div>
         </div>
       </div>

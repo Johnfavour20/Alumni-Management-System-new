@@ -51,6 +51,13 @@ const App: React.FC = () => {
     return map;
   }, [alumni, students]);
 
+  const currentUserAlumniRecord = useMemo(() => {
+    if (currentUser?.role === 'Alumnus') {
+      return alumni.find(a => a.id === currentUser.id) || null;
+    }
+    return null;
+  }, [currentUser, alumni]);
+
   const unreadMessages = conversations.filter(c => {
       const lastMessage = c.messages[c.messages.length - 1];
       return currentUser && lastMessage && lastMessage.authorId !== currentUser.id && !lastMessage.read;
@@ -201,6 +208,9 @@ const App: React.FC = () => {
     try {
         await new Promise(resolve => setTimeout(resolve, 1500));
         if (id !== undefined) {
+            if (id === currentUser?.id) {
+                setCurrentUser(prevUser => prevUser ? { ...prevUser, firstName: formData.firstName, lastName: formData.lastName, email: formData.email } : null);
+            }
             setAlumni(alumni.map(person => person.id === id ? { ...person, ...formData } : person));
             showToast('Alumni updated successfully!', 'success');
         } else {
@@ -320,7 +330,7 @@ const App: React.FC = () => {
       case 'messages': return <Messages conversations={conversations} users={allUsersMap} currentUser={currentUser} activeConversationId={activeConversationId} setActiveConversationId={setActiveConversationAndReadMessages} onSendMessage={handleSendMessage} />;
       case 'analytics': return <Analytics alumni={alumni} />;
       case 'newsletter': return <Newsletter alumni={alumni} showToast={showToast} />;
-      case 'profile': return <Profile user={currentUser} onUpdateUser={handleUpdateUser} showToast={showToast} />;
+      case 'profile': return <Profile user={currentUser} onUpdateUser={handleUpdateUser} showToast={showToast} openModal={openModal} currentUserAlumniRecord={currentUserAlumniRecord} />;
       default: return <Dashboard alumni={alumni} animateCards={animateCards} />;
     }
   };
@@ -351,6 +361,7 @@ const App: React.FC = () => {
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
         currentUser={currentUser}
+        onLogout={handleLogout}
       />
       
       <main className="transition-all duration-300">

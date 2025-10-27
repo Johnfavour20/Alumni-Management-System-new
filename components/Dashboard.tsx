@@ -38,7 +38,7 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
         <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent mb-2">
           Alumni Dashboard
         </h2>
-        <p className="text-gray-600 dark:text-gray-400">Welcome to the Computer Science Alumni Management System</p>
+        <p className="text-lg text-gray-700 dark:text-gray-300">Welcome to the Computer Science Alumni Management System</p>
       </div>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
@@ -55,7 +55,7 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
           >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">{stat.title}</p>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{stat.title}</p>
                 <p className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">{stat.value}</p>
               </div>
               <div className={`p-3 rounded-xl bg-gradient-to-r ${stat.color}`}>
@@ -77,7 +77,7 @@ const Dashboard: React.FC<Props> = ({ alumni, animateCards }) => {
                   {/* FIX: Cast `count` to a number to resolve arithmetic operation type error. */}
                   <div className="h-full bg-gradient-to-r from-green-500 to-green-700 rounded-full transition-all duration-1000 ease-out" style={{ width: `${(Number(count) / (totalAlumni || 1)) * 100}%` }}></div>
                 </div>
-                <span className="w-8 text-sm text-gray-600 dark:text-gray-400">{count}</span>
+                <span className="w-8 text-sm text-gray-700 dark:text-gray-300">{count}</span>
               </div>
             ))}
           </div>

@@ -38,7 +38,7 @@ const Analytics: React.FC<Props> = ({ alumni }) => {
     <div className="p-4 lg:p-8">
       <div className="mb-8">
         <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent mb-2">Analytics Dashboard</h2>
-        <p className="text-gray-600 dark:text-gray-400">Comprehensive insights into alumni data and trends</p>
+        <p className="text-lg text-gray-700 dark:text-gray-300">Comprehensive insights into alumni data and trends</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
@@ -60,10 +60,10 @@ const Analytics: React.FC<Props> = ({ alumni }) => {
       <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg mb-8">
         <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center"><DollarSign className="h-6 w-6 text-green-500 mr-2" />Salary Analytics</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"><p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Average Salary</p><p className="text-2xl font-bold text-green-600">₦{(averageSalary / 1000000).toFixed(1)}M</p></div>
-          <div className="text-center p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg"><p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Highest Salary</p><p className="text-2xl font-bold text-teal-600">₦{(highestSalary / 1000000).toFixed(1)}M</p></div>
-          <div className="text-center p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg"><p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Lowest Salary</p><p className="text-2xl font-bold text-emerald-600">₦{(lowestSalary / 1000000).toFixed(1)}M</p></div>
-          <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"><p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Salary Range</p><p className="text-2xl font-bold text-green-500">₦{((highestSalary - lowestSalary) / 1000000).toFixed(1)}M</p></div>
+          <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"><p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Average Salary</p><p className="text-2xl font-bold text-green-600">₦{(averageSalary / 1000000).toFixed(1)}M</p></div>
+          <div className="text-center p-4 bg-teal-50 dark:bg-teal-900/20 rounded-lg"><p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Highest Salary</p><p className="text-2xl font-bold text-teal-600">₦{(highestSalary / 1000000).toFixed(1)}M</p></div>
+          <div className="text-center p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg"><p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Lowest Salary</p><p className="text-2xl font-bold text-emerald-600">₦{(lowestSalary / 1000000).toFixed(1)}M</p></div>
+          <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"><p className="text-sm text-gray-700 dark:text-gray-300 mb-2">Salary Range</p><p className="text-2xl font-bold text-green-500">₦{((highestSalary - lowestSalary) / 1000000).toFixed(1)}M</p></div>
         </div>
       </div>
 
@@ -80,8 +80,8 @@ const Analytics: React.FC<Props> = ({ alumni }) => {
             <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"><div className="flex justify-between items-center mb-2"><span className="text-sm font-medium text-gray-700 dark:text-gray-300">Active Users</span><span className="text-sm font-bold text-green-600">{((activeAlumni / totalAlumni) * 100).toFixed(1)}%</span></div><div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2"><div className="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-1000" style={{ width: `${(activeAlumni / totalAlumni) * 100}%` }}></div></div></div>
             <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg"><div className="flex justify-between items-center mb-2"><span className="text-sm font-medium text-gray-700 dark:text-gray-300">Recent Graduates (2020+)</span><span className="text-sm font-bold text-green-600">{((recentGraduates / totalAlumni) * 100).toFixed(1)}%</span></div><div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2"><div className="h-full bg-gradient-to-r from-green-300 to-green-400 rounded-full transition-all duration-1000" style={{ width: `${(recentGraduates / totalAlumni) * 100}%` }}></div></div></div>
             <div className="grid grid-cols-2 gap-4 mt-4">
-                <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg"><p className="text-lg font-bold text-green-600">{new Set(alumni.map(a => a.company)).size}</p><p className="text-xs text-gray-600 dark:text-gray-400">Companies</p></div>
-                <div className="text-center p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg"><p className="text-lg font-bold text-teal-600">{new Set(alumni.map(a => a.location.split(',')[0])).size}</p><p className="text-xs text-gray-600 dark:text-gray-400">Cities</p></div>
+                <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg"><p className="text-lg font-bold text-green-600">{new Set(alumni.map(a => a.company)).size}</p><p className="text-sm text-gray-700 dark:text-gray-300">Companies</p></div>
+                <div className="text-center p-3 bg-teal-50 dark:bg-teal-900/20 rounded-lg"><p className="text-lg font-bold text-teal-600">{new Set(alumni.map(a => a.location.split(',')[0])).size}</p><p className="text-sm text-gray-700 dark:text-gray-300">Cities</p></div>
             </div>
           </div>
         </div>

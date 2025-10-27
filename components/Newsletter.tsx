@@ -157,7 +157,7 @@ const Newsletter: React.FC<Props> = ({ alumni, showToast }) => {
     <div className="p-4 lg:p-8">
       <div className="mb-8">
         <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent mb-2">Alumni Newsletter</h2>
-        <p className="text-gray-600 dark:text-gray-400">Compose and send newsletters to your alumni network</p>
+        <p className="text-lg text-gray-700 dark:text-gray-300">Compose and send newsletters to your alumni network</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -211,7 +211,7 @@ const Newsletter: React.FC<Props> = ({ alumni, showToast }) => {
 
             <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
               <h3 className="text-xl font-bold mb-4">Ready to Send?</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">You are about to send this newsletter to {selectedAlumni.length} alumni. Please review the content before sending.</p>
+              <p className="text-base text-gray-700 dark:text-gray-300 leading-relaxed mb-6">You are about to send this newsletter to {selectedAlumni.length} alumni. Please review the content before sending.</p>
               <button onClick={handleSendNewsletter} disabled={isLoading || selectedAlumni.length === 0} className="w-full flex items-center justify-center space-x-2 px-6 py-3 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-lg hover:from-green-600 hover:to-green-800 transition-all duration-300 transform hover:scale-105 shadow-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed">
                 {isLoading ? <Loader className="h-5 w-5 animate-spin" /> : <Send className="h-5 w-5" />}
                 <span>{isLoading ? 'Sending...' : 'Send Newsletter'}</span>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import type { Post, Alumni, User } from '../types';
 import { ThumbsUp, MessageCircle, Send } from './icons';
@@ -37,7 +36,7 @@ const Community: React.FC<Props> = ({ posts, users, currentUser, onLikePost, onA
     <div className="p-4 lg:p-8 max-w-4xl mx-auto">
       <div className="mb-8">
         <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent mb-2">Community Feed</h2>
-        <p className="text-gray-600 dark:text-gray-400">Share updates and connect with fellow alumni and students</p>
+        <p className="text-lg text-gray-700 dark:text-gray-300">Share updates and connect with fellow alumni and students</p>
       </div>
 
       <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg mb-8">
@@ -72,13 +71,13 @@ const Community: React.FC<Props> = ({ posts, users, currentUser, onLikePost, onA
                             <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800 dark:bg-teal-800 dark:text-teal-100">Student</span>
                         )}
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{post.timestamp}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{post.timestamp}</p>
                 </div>
               </div>
               
-              <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap mb-4">{post.content}</p>
+              <p className="text-base text-gray-800 dark:text-gray-200 whitespace-pre-wrap mb-4 leading-relaxed">{post.content}</p>
               
-              <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-400 mb-4">
+              <div className="flex items-center space-x-6 text-sm text-gray-700 dark:text-gray-300 mb-4">
                 <span>{post.likes.length} Likes</span>
                 <span>{post.comments.length} Comments</span>
               </div>
@@ -108,7 +107,7 @@ const Community: React.FC<Props> = ({ posts, users, currentUser, onLikePost, onA
                                             <span className="px-1.5 py-0.5 rounded-full text-xs font-medium bg-teal-100 text-teal-800 dark:bg-teal-800 dark:text-teal-100">Student</span>
                                         )}
                                     </div>
-                                    <p className="text-sm">{comment.content}</p>
+                                    <p className="text-sm leading-relaxed">{comment.content}</p>
                                 </div>
                             </div>
                         )

@@ -32,7 +32,7 @@ const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeCo
     <div className="p-4 lg:p-8">
       <div className="mb-8">
         <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent mb-2">Messages</h2>
-        <p className="text-gray-600 dark:text-gray-400">Your private conversations</p>
+        <p className="text-lg text-gray-700 dark:text-gray-300">Your private conversations</p>
       </div>
 
       <div className="flex h-[70vh] bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden">
@@ -58,7 +58,7 @@ const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeCo
                       <p className={`font-semibold truncate ${unread ? 'text-gray-900 dark:text-white' : 'text-gray-700 dark:text-gray-300'}`}>{participant ? `${participant.firstName} ${participant.lastName}` : 'Unknown'}</p>
                       {unread && <div className="w-2.5 h-2.5 bg-green-500 rounded-full flex-shrink-0"></div>}
                     </div>
-                    <p className={`text-sm truncate ${unread ? 'text-gray-700 dark:text-gray-200' : 'text-gray-500 dark:text-gray-400'}`}>{lastMessage?.content}</p>
+                    <p className={`text-sm truncate ${unread ? 'text-gray-700 dark:text-gray-200' : 'text-gray-600 dark:text-gray-400'}`}>{lastMessage?.content}</p>
                   </div>
                 </div>
               );
@@ -85,8 +85,8 @@ const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeCo
                 {activeConversation.messages.map(msg => (
                   <div key={msg.id} className={`flex ${msg.authorId === currentUser.id ? 'justify-end' : 'justify-start'}`}>
                     <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${msg.authorId === currentUser.id ? 'bg-green-700 text-white rounded-br-none' : 'bg-white dark:bg-gray-700 rounded-bl-none'}`}>
-                      <p>{msg.content}</p>
-                      <p className={`text-xs mt-1 text-right ${msg.authorId === currentUser.id ? 'opacity-90' : 'text-gray-500 dark:text-gray-400'}`}>{msg.timestamp}</p>
+                      <p className="text-base">{msg.content}</p>
+                      <p className={`text-xs mt-1 text-right ${msg.authorId === currentUser.id ? 'opacity-90' : 'text-gray-600 dark:text-gray-400'}`}>{msg.timestamp}</p>
                     </div>
                   </div>
                 ))}
@@ -114,7 +114,7 @@ const Messages: React.FC<Props> = ({ conversations, users, currentUser, activeCo
                 <div>
                     <Mail className="h-16 w-16 mx-auto mb-4 text-gray-400" />
                     <h3 className="text-xl font-semibold">Select a conversation</h3>
-                    <p>Choose a chat from the left panel to start messaging.</p>
+                    <p className="text-base">Choose a chat from the left panel to start messaging.</p>
                 </div>
             </div>
           )}

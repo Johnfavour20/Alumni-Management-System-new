@@ -121,7 +121,7 @@ const AlumniModal: React.FC<Props> = ({ modalType, selectedAlumni, currentUser, 
                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                    {selectedAlumni.firstName} {selectedAlumni.lastName}
                  </h2>
-                 <p className="text-lg text-gray-600 dark:text-gray-300">{selectedAlumni.currentPosition}</p>
+                 <p className="text-lg text-gray-700 dark:text-gray-300">{selectedAlumni.currentPosition}</p>
                  <p className="text-green-600 dark:text-green-400 font-medium">{selectedAlumni.company}</p>
                </div>
                 <div className="flex flex-col items-end space-y-2">

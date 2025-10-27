@@ -1,15 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
-import type { User } from '../types';
-import { User as UserIcon, Mail, Save, Key, Loader } from './icons';
+import type { User, Alumni } from '../types';
+import { User as UserIcon, Mail, Save, Key, Loader, Edit } from './icons';
 
 interface Props {
   user: User;
   onUpdateUser: (userData: Omit<User, 'id' | 'role'>) => Promise<void>;
   showToast: (message: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
+  openModal: (type: 'edit', alumniData: Alumni) => void;
+  currentUserAlumniRecord: Alumni | null;
 }
 
-const Profile: React.FC<Props> = ({ user, onUpdateUser, showToast }) => {
+const Profile: React.FC<Props> = ({ user, onUpdateUser, showToast, openModal, currentUserAlumniRecord }) => {
   const [profileData, setProfileData] = useState({
     firstName: '',
     lastName: '',
@@ -72,13 +73,24 @@ const Profile: React.FC<Props> = ({ user, onUpdateUser, showToast }) => {
     <div className="p-4 lg:p-8">
       <div className="mb-8">
         <h2 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-500 to-green-700 bg-clip-text text-transparent mb-2">My Profile</h2>
-        <p className="text-gray-600 dark:text-gray-400">View and manage your personal information and settings.</p>
+        <p className="text-lg text-gray-700 dark:text-gray-300">View and manage your personal information and settings.</p>
       </div>
 
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Profile Information Card */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg">
-          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center"><UserIcon className="h-6 w-6 text-green-500 mr-2" />Profile Information</h3>
+           <div className="flex justify-between items-center mb-6">
+             <h3 className="text-xl font-bold text-gray-800 dark:text-white flex items-center"><UserIcon className="h-6 w-6 text-green-500 mr-2" />Profile Information</h3>
+             {user.role === 'Alumnus' && currentUserAlumniRecord && (
+                <button 
+                  onClick={() => openModal('edit', currentUserAlumniRecord)}
+                  className="flex items-center space-x-2 px-4 py-2 bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200 rounded-lg hover:bg-green-200 dark:hover:bg-green-700 transition-colors text-sm font-medium"
+                >
+                  <Edit className="h-4 w-4" />
+                  <span>Edit Full Profile</span>
+                </button>
+             )}
+           </div>
           <form onSubmit={handleProfileSubmit} className="space-y-6">
             <div className="flex items-center space-x-6">
                 <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-green-700 rounded-full flex items-center justify-center text-white text-2xl font-bold">
@@ -88,7 +100,7 @@ const Profile: React.FC<Props> = ({ user, onUpdateUser, showToast }) => {
                     <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                         {user.firstName} {user.lastName}
                     </h2>
-                    <p className="text-lg text-gray-600 dark:text-gray-300">{user.role}</p>
+                    <p className="text-lg text-gray-700 dark:text-gray-300">{user.role}</p>
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

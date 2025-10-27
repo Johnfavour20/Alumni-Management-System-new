@@ -80,7 +80,7 @@ const SignUpPage: React.FC<Props> = ({ onSignUp, isLoading, onSwitchToLogin }) =
                <UserPlus className="h-12 w-12 text-green-500" />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white text-center">Create Your Account</h2>
-            <p className="text-gray-600 dark:text-gray-400 mt-1">Join the UNIPORT CS network</p>
+            <p className="text-base text-gray-700 dark:text-gray-300 mt-1">Join the UNIPORT CS network</p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -88,11 +88,11 @@ const SignUpPage: React.FC<Props> = ({ onSignUp, isLoading, onSwitchToLogin }) =
                 <div className="flex space-x-4">
                     <label className="flex-1 flex items-center p-3 border rounded-lg cursor-pointer transition-colors" style={role === 'Alumnus' ? {borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.05)'} : {}}>
                         <input type="radio" name="role" value="Alumnus" checked={role === 'Alumnus'} onChange={() => setRole('Alumnus')} className="h-4 w-4 text-green-600 focus:ring-green-500" />
-                        <span className="ml-3 text-sm font-medium">Alumnus</span>
+                        <span className="ml-3 text-base font-medium">Alumnus</span>
                     </label>
                     <label className="flex-1 flex items-center p-3 border rounded-lg cursor-pointer transition-colors" style={role === 'Student' ? {borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.05)'} : {}}>
                         <input type="radio" name="role" value="Student" checked={role === 'Student'} onChange={() => setRole('Student')} className="h-4 w-4 text-green-600 focus:ring-green-500" />
-                        <span className="ml-3 text-sm font-medium">Student</span>
+                        <span className="ml-3 text-base font-medium">Student</span>
                     </label>
                 </div>
             </div>
@@ -154,7 +154,7 @@ const SignUpPage: React.FC<Props> = ({ onSignUp, isLoading, onSwitchToLogin }) =
             </div>
           </form>
            <div className="mt-6 text-center text-sm">
-            <p className="text-gray-500 dark:text-gray-400">
+            <p className="text-gray-600 dark:text-gray-400">
                 Already have an account?{' '}
                 <button onClick={onSwitchToLogin} className="font-medium text-green-600 hover:text-green-500 focus:outline-none">
                     Sign In
